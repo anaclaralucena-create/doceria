@@ -1,0 +1,314 @@
+
+clientesL = []
+produtoE = []
+with open("clientes.txt", "a", encoding="utf-8"):
+    pass
+
+with open("estoque.txt", "a", encoding="utf-8"):
+    pass
+
+with open("clientes.txt", "r", encoding="utf-8") as arquivo:
+    for linha in arquivo:
+        dados = linha.strip().split(";")
+        if ";" in linha:
+            clientesL.append(dados) #estudar essa parte mais
+
+
+with open("estoque.txt" , "r", encoding="utf-8")as arquivo:
+    for linha in arquivo:
+        dados = linha.split(";")
+        if len(dados) == 3:
+            dados[1] = float(dados[1])
+            dados[2] = int(dados[2])
+            produtoE.append(dados)
+    
+    
+def cadastrarCliente():
+    nome = input("Digite o nome do cliente para o cadastro: ")
+    nome= nome.title()
+    idade = int(input("Digite a idade do cliente para o cadastro: "))
+
+    if idade < 18:
+        print("Cliente não pode ser cadastrado. Menor de idade.")
+        return
+
+    cpf = input("Digite o CPF para concluir o cadastro: ")
+    cpf = cpf.replace("." , "")
+    cpf = cpf.replace("-" , "")
+    for cliente in clientesL:
+        if cliente[1] == cpf:
+            print("Esse CPF já foi cadastrado.")
+            return
+
+    print(f"Cliente cadastrado: {nome}. Com o CPF: {cpf}")
+    clientesL.append([nome, cpf])
+
+    with open("clientes.txt", "a", encoding="utf-8") as arquivo:
+        arquivo.write(nome + ";" + cpf + "\n")
+
+
+def encontrarCadastro():
+    cpf = input("Digite o cpf do cliente que deseja encontrar: ")
+    cpf = cpf.replace("." , "")
+    cpf = cpf.replace("-" , "")
+    for cliente in clientesL:
+        if cliente[1] == cpf:
+            print(f"Cliente encontrado: {cliente[0]}")
+            break
+    else:
+        print("Cliente não encontrado.")
+    
+def cadastrarProduto():
+    while True:
+        
+        print("""==== CATEGORIAS DE PRODUTOS ====
+        0 - Voltar ao menu 
+        1 - Tortas alcoólicas
+        2 - Doces alcoólicos
+        3 - Trufas alcoólicas""")
+
+        categoria = input("Escolha uma categoria: ")
+        if categoria == "0":
+            return
+        if categoria == "1":
+           print("Categoria: Tortas alcoólicas")
+           cadastrarTortas()
+        elif categoria == "2":
+           print("Categoria: Doces alcoólicos")
+           cadastrarDoces()
+        elif categoria == "3":
+           print("Categoria: Trufas alcoólicas")
+           cadastrarTrufas() 
+        else:
+           print("Opção inválida!")    
+
+    
+def cadastrarTortas():
+    while True:
+        print("""====Menu de tortas ====
+        0 - Voltar ao menu
+        1 - Torta de chocolate com licor
+        2 - Torta de morango com gin
+        3 - Torta de chocolate com rum
+        4 - Torta de chocolate com vinho
+        5 - Torta de limão com licor""")
+        opcao = input("Informe o número da torta escolhida:")
+
+        if opcao == "0":
+            return
+        if opcao == "1":
+            nome = "Torta de chocolate com licor"
+        elif opcao == "2":
+            nome = "Torta de morango com gin"
+        elif opcao == "3":
+            nome = "Torta de chocolate com rum"
+        elif opcao == "4":
+            nome = "Torta de chocolate com vinho"
+        elif opcao == "5":
+            nome = "Torta de limão com licor"
+        else:
+            print("Opção inválida!")
+            return
+
+        preco = float(input("Digite o preço do produto: "))
+        quantidade = int(input("Informe a quantidade em estoque: "))
+        if quantidade < 20:
+            print("Mínimo 20 unidades!")
+            return
+
+        produtoE.append([nome, preco, quantidade])
+
+        print("Torta cadastrada com sucesso!")
+
+        with open("estoque.txt" , "a", encoding="utf-8")as arquivo:
+           arquivo.write(f"{nome};{preco};{quantidade}\n")
+
+
+def cadastrarDoces():
+    while True:
+        print("""====Menu de doces===
+        0 - Voltar ao menu
+        1 - Brigadeiro de licor de chocolate
+        2 - Brigadeiro de gin com frutas vermelhas
+        3 - Brownie com rum
+        4 - Beijinho com licor de coco
+        5 - Palha italiana com licor de café""")
+        opcao = input("Infome o número do doce escolhido:")
+        if opcao == "1":
+            nome = "Brigadeiro de licor de chocolate"
+        elif opcao == "2":
+            nome = "Brigadeiro de gin com frutas vermelhas"
+        elif opcao == "3":
+            nome = "Brownie com rum"
+        elif opcao == "4":
+            nome = "Beijinho com licor de coco"
+        elif opcao == "5":
+            nome = "Palha italiana com licor de café"
+        else:
+            print("Opção inválida!")
+            return
+        preco = float(input("Digite o preço do produto:"))
+        quantidade = int(input("Informe a quantidade em estoque:"))
+        if quantidade < 20:
+            print("Mínimo 20 unidades!")
+            return
+        produtoE.append([nome, preco, quantidade])
+        print("Doce cadastrado com sucesso!")
+    
+        with open("estoque.txt" , "a", encoding="utf-8")as arquivo:
+            arquivo.write(f"{nome};{preco};{quantidade}\n")
+
+def cadastrarTrufas():
+    while True:
+          print("""====Menu de trufas ====
+        0 - Voltar ao menu
+        1 - Trufa de licor de chocolate
+        2 - Trufa de gin com frutas vermelhas
+        3 - Trufa de rum
+        4 - Trufa de licor de café
+        5 - Trufa de licor de coco""")
+          opcao = input("Informe o número da trufa escolhida:")
+          if opcao == "0":
+              return     
+          elif opcao == "1":
+              nome = "Trufa de licor de chocolate"
+          elif opcao == "2":
+              nome = "Trufa de gin com frutas vermelhas"
+          elif opcao == "3":
+              nome = "Trufa de rum"
+          elif opcao == "4":
+              nome = "Trufa de licor de café"
+          elif opcao == "5":
+              nome = "Trufa de licor de coco"
+          else:
+              print("Opção inválida!")
+              return
+
+          preco = float(input("Digite o preço do produto: "))
+          quantidade = int(input("Informe a quantidade em estoque: "))
+
+          if quantidade < 20:
+              print("Mínimo de 20 unidades!")
+              return
+
+          produtoE.append([nome, preco, quantidade])
+
+          print("Trufa cadastrada com sucesso!")
+
+          with open("estoque.txt", "a", encoding="utf-8") as arquivo:
+              arquivo.write(f"{nome};{preco};{quantidade}\n")
+
+
+def cadastrarBebidas():
+        print("""==== MENU DE BEBIDAS ====
+    0 - Voltar ao menu de categorias
+    1 - Licor de chocolate
+    2 - Gin com frutas vermelhas
+    3 - Rum
+    4 - Licor de café
+    5 - Agua
+    6 - Sucos""")
+
+        opcao = input("Informe o número da bebida escolhida: ")
+
+        if opcao == "0":
+            return
+        elif opcao == "1":
+            nome = "Licor de chocolate"
+        elif opcao == "2":
+            nome = "Gin com frutas vermelhas"
+        elif opcao == "3":
+            nome = "Rum"
+        elif opcao == "4":
+            nome = "Licor de café"
+        elif opcao == "5":
+            nome = "Agua"
+        elif opcao == "6":
+            cadastrarSucos()
+        else:
+            print("Opção inválida!")
+            return
+
+        preco = float(input("Digite o preço da bebida: "))
+        quantidade = int(input("Informe a quantidade em estoque: "))
+
+        if quantidade < 20:
+            print("Mínimo de 20 unidades!")
+            return
+        produtoE.append([nome, preco, quantidade])
+
+        print("Bebida cadastrada com sucesso!")
+
+        with open("estoque.txt", "a", encoding="utf-8") as arquivo:
+            arquivo.write(f"{nome};{preco};{quantidade}\n")
+
+
+def listarProdutos():
+    if len(produtoE) == 0:
+        print("Nenhum produto cadastrado.")
+    else:
+        for produto in produtoE:
+            print("Nome:", produto[0])
+            print("Preço: R$", produto[1])
+            print("Quantidade:", produto[2])
+            print("----------------------")
+  
+ 
+while True:
+    print("""===== DOCERIA DOCE DE DOSE =====
+    1 - Clientes
+    2 - Produtos
+    3 - Vendas
+    4 - Relatórios
+    5 - Sair""")
+
+    opcaoM = input("Escolha uma opção: ")
+
+    if opcaoM == "1":
+        print("""Menu de clientes:
+1 - Cadastrar
+2 - Encontrar cadastro""")
+
+        escolha1 = int(input("Escolha uma opção: "))
+
+        if escolha1 == 1:
+            cadastrarCliente()
+        elif escolha1 == 2:
+            encontrarCadastro()
+        else:
+            print("Opção inválida!")
+
+    elif opcaoM == "2":
+        print("""==== MENU PRODUTOS ====
+    1 - Cadastrar
+    2 - Listar
+    3 - Atualizar
+    4 - Excluir
+    5 - Relatório de produtos em estoque
+    6 - Voltar""")
+        opcao = input("Escolha uma opção:")
+        if opcao == "1":
+            print("""
+     1 - Doces alcoólicos
+     2 - Bebidas""")
+            opcaoDB = input("O que você deseja cadastrar?")
+            if opcaoDB == "1":
+               cadastrarProduto()
+            elif opcaoDB == "2":
+                print("Cadastro de bebidas")
+                cadastrarBebidas()
+        elif opcao == "2":
+               listarProdutos()
+
+    elif opcaoM == "3":
+        print("Menu de vendas")
+
+    elif opcaoM == "4":
+        print("Menu de relatórios")
+
+    elif opcaoM == "5":
+        print("Saindo do sistema...")
+        break
+
+    else:
+        print("Opção inválida!")
