@@ -1,0 +1,453 @@
+
+clientes=[]
+contadorN = 1
+   
+def cadastrarCliente(contadorN):
+    nome = input("Digite o nome do cliente:")
+    nome= nome.title()
+    idade = int(input("Digite a idade do cliente:"))
+    if (idade <18):
+        print("Você é menor de idade")
+        return contadorN
+    else:
+        print(f"Cliente: {nome} cadastrado(a)!")
+        print(f"Sua identificação é: {contadorN}")
+        
+    cliente = [contadorN, nome, idade]
+    clientes.append(cliente)
+    with open("clientesdocedose.txt", "a", encoding="utf-8") as arquivo:
+        arquivo.write(f"{contadorN}, {nome} , {idade}\n")
+
+    contadorN += 1
+    return contadorN
+
+def encontrarCliente():
+    idCliente = int(input("Digite o ID do cliente:"))
+    clienteEncontrado = False
+    for i in clientes:
+        if (idCliente == i[0]):
+            print(f"Cliente encontrado.ID: {i[0]}, nome: {i[1]}, idade: {i[2]}")
+            clienteEncontrado = True
+    if clienteEncontrado == False:
+        print("Cliente não encontrado")
+
+        
+def excluirCliente():
+    if len(clientes) == 0:
+        print("Nenhum cliente cadastrado")
+        return
+
+    contadorN = int(input("Digite o ID do cliente que deseja excluir: "))
+
+    for c in clientes:
+        if c[0] == contadorN:
+            print(f"ID: {c[0]}. Cliente: {c[1]}. Idade: {c[2]}")
+
+            clientes.remove(c)
+
+            with open("clientesdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for cli in clientes:
+                    arquivo.write(f"{cli[0]}, {cli[1]}, {cli[2]}\n")
+
+            print("Cliente excluído com sucesso!")
+            return
+
+    print("Cliente não encontrado!")
+def atualizarCliente():
+    if len(clientes) == 0:
+        print("Nenhum cliente cadastrado")
+        return
+
+    print("Atualizar cliente:")
+    buscID = int(input("Digite o ID do cliente que deseja atualizar: "))
+
+    for c in clientes:
+        if c[0] == buscID:
+            print(f"Cliente encontrado: {c[1]}")
+            print(f"Idade atual: {c[2]}")
+
+            novo_nome = input("Digite o novo nome: ")
+            novo_nome = novo_nome.title()
+
+            nova_idade = int(input("Digite a nova idade: "))
+
+            if nova_idade < 18:
+                print("O cliente precisa ser maior de idade!")
+                return
+
+            c[1] = novo_nome
+            c[2] = nova_idade
+
+            with open("clientesdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for cli in clientes:
+                    arquivo.write(f"{cli[0]}, {cli[1]}, {cli[2]}\n")
+
+            print("Cliente atualizado com sucesso!")
+            return
+
+    print("Cliente com esse ID não foi encontrado!")
+
+    
+
+contadorP = 1
+produtos = []
+def cadastrarProduto(contadorP):
+    print("""=== Categorias ===
+1 - Trufas
+2 - Tortas
+3 - Bombons
+4 - Brownies""")
+
+    opcao = int(input("Escolha a categoria: "))
+
+    if opcao == 1:
+        categoria = "Trufas"
+    elif opcao == 2:
+        categoria = "Tortas"
+    elif opcao == 3:
+        categoria = "Bombons"
+    elif opcao == 4:
+        categoria = "Brownies"
+    else:
+        print("Categoria inválida!")
+        return contadorP 
+   
+    sabor = input(f"Digite o sabor do(a) {categoria}: ")
+    sabor=sabor.capitalize()
+    preco = float(input("Digite o preço:  "))
+    if (preco<=0):
+        print("O produto tem que ser acima de 0 reais")
+        return contadorP
+    quantidade = int(input("Digite a quantidade em estoque: "))
+    if(quantidade<20):
+        print("É nescessário ter no minimo 20 unidade no estoque")
+        return contadorP
+
+    produto = [contadorP, categoria, sabor , preco, quantidade]
+    produtos.append(produto)
+
+    with open("produtosdocedose.txt", "a", encoding="utf-8") as arquivo:
+        arquivo.write(f"ID:{contadorP};produto:{categoria};{sabor};valor:{preco};quantidade:{quantidade}\n")
+
+    print(f"Produto cadastrado com sucesso!")
+    print(f"ID do produto: {contadorP}")
+
+    contadorP += 1
+    return contadorP
+
+def buscarProduto():
+    idProduto = int(input("Digite o ID do produto: "))
+    produtoEncontrado = False
+    for i in produtos:
+        if (idProduto == i[0]):
+            print(f"Produto encontrado: ID: {i[0]}, Categoria: {i[1]}, Sabor: {i[2]}, Preço: {i[3]}, Quantidade: {i[4]}")
+            produtoEncontrado = True
+            break
+    if produtoEncontrado == False:
+        print("Produto não encontrado.")
+
+
+def atualizarProduto():
+    if len(produtos) == 0:
+        print("estoque zerado")
+        return
+
+    print("Atualizar produto:")
+    buscID = int(input("Digite o ID do produto que deseja atualizar: "))
+    
+    for p in produtos:
+         if p[0] == buscID:
+            print(f"Produto encontrado: {p[1]} de {p[2]}")
+            print(f"Preço atual: R$ {p[3]} , Estoque atual: {p[4]}")
+            
+            novo_preco = float(input("Digite o novo preço: "))
+            if novo_preco <= 0:
+                print("O preço tem que ser acima de 0 reais!")
+                return
+                
+            nova_quantidade = int(input("Digite a nova quantidade em estoque: "))
+            if nova_quantidade < 20:
+                print("Minimo 20 unidades!")
+                return
+            
+            p[3] = novo_preco
+            p[4] = nova_quantidade
+            
+            with open("produtosdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for prod in produtos:
+                    arquivo.write(f"ID:{prod[0]};produto:{prod[1]};{prod[2]};valor:{prod[3]};quantidade:{prod[4]}\n")
+            
+            print("Produto atualizado")
+            return 
+         print("Produto com esse ID não foi encontrado!")
+         
+def excluirProduto():
+    
+    if len(produtos) == 0:
+      print("estoque zerado")
+      return
+
+    buscID = int(input("Digite o ID do produto que deseja atualizar: "))
+    for p in produtos:
+        if p[0] == buscID:
+          print(f"Produto encontrado: {p[1]} de {p[2]}")
+          print(f"Preço atual: R$ {p[3]} , Estoque atual: {p[4]}")
+
+    produtos.remove(p)
+    with open("produtosdocedose.txt", "w", encoding="utf-8") as arquivo:
+       for prod in produtos:
+           arquivo.write(f"ID:{prod[0]};produto:{prod[1]};{prod[2]};valor:{prod[3]};quantidade:{prod[4]}\n")
+
+
+
+
+contadorV = 1
+vendas = []
+
+def cadastrarVenda(contadorV):
+    idCliente = int(input("Digite o ID do cliente: "))
+
+    for c in clientes:
+        if (c[0] == idCliente):
+            cliente = c
+            break
+    else:
+        print("cliente não encontrado!")
+        return contadorV
+
+    idProduto = int(input("Digite o ID do produto: "))
+
+    for p in produtos:
+        if (p[0] == idProduto):
+            produto = p
+            break
+    else:
+        print("Produto não encontrado")
+        return contadorV
+
+    quantidade = int(input("Digite a quantidade da venda: "))
+
+    if (quantidade <= 0):
+        print("qantidade inválida")
+        return contadorV
+
+    if (quantidade > produto[4]):
+        print("estoque insuficiente")
+        return contadorV
+
+    valorTotal = produto[3] * quantidade
+
+    
+    venda = [contadorV, idCliente, idProduto, produto[2], quantidade, produto[3], valorTotal]
+    vendas.append(venda)
+
+    produto[4] -= quantidade
+
+    with open("vendasdocedose.txt", "a", encoding="utf-8") as arquivo:
+        arquivo.write(f"{contadorV}, {idCliente}, {idProduto}, {produto[2]}, {quantidade}, {produto[3]}, {valorTotal}\n")
+    with open("produtosdocedose.txt", "w", encoding="utf-8") as arquivo:
+        for prod in produtos:
+            arquivo.write(f"ID:{prod[0]};produto:{prod[1]};{prod[2]};valor:{prod[3]};quantidade:{prod[4]}\n")
+
+    print("Venda cadastrada com sucesso!")
+    print(f"ID da venda: {contadorV}")
+    print(f"Valor total: R$ {valorTotal:.2f}")
+
+    contadorV += 1
+    return contadorV
+
+def buscarVenda():
+    idVenda = int(input("Digite o ID da venda: "))
+    vendaEncontrada = False
+
+    for v in vendas:
+        if (idVenda == v[0]):
+            print(f"""Venda encontrada: ID: {v[0]}, ID do cliente: {v[1]}, ID do produto: {v[2]}, produto: {v[3]},
+quantidade: {v[4]}, valor unitário: R$ {v[5]:.2f}, valor total: R$ {v[6]:.2f}""")
+
+            vendaEncontrada = True
+
+    if vendaEncontrada == False:
+        print("Venda não encontrada!")
+
+
+def atualizarVenda():
+    if len(vendas) == 0:
+        print("Nenhuma venda cadastrada")
+        return
+
+    print("atualizar venda")
+    buscID = int(input("Digite o ID da venda que deseja atualizar "))
+
+    for v in vendas:
+        if v[0] == buscID:
+            print(f"Venda encontrada: {v}")
+            print(f"Quantidade atual: {v[4]}")
+
+            for p in produtos:
+                if p[0] == v[2]:
+                    produto = p
+                    break
+            else:
+                print("Produto não encontrado!")
+                return
+
+            nova_quantidade = int(input("Digite nova quantidade: "))
+
+            if nova_quantidade <= 0:
+                print("Quantidade inválida!menos de 20")
+                return
+
+            estoqueDisponivel = produto[4] + v[4]
+
+            if nova_quantidade > estoqueDisponivel:
+                print("Estoque insuficiente")
+                return
+
+            produto[4] += v[4]
+            produto[4] -= nova_quantidade
+
+            v[4] = nova_quantidade
+            v[6] = nova_quantidade * v[5]
+
+            with open("vendasdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for venda in vendas:
+                    arquivo.write(f"{venda[0]}, {venda[1]}, {venda[2]}, {venda[3]}, {venda[4]}, {venda[5]}, {venda[6]}\n")
+
+            with open("produtosdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for prod in produtos:
+                    arquivo.write(f"ID:{prod[0]};produto:{prod[1]};{prod[2]};valor:{prod[3]};quantidade:{prod[4]}\n")
+
+            print("Venda atualizada com sucesso!")
+            return
+
+    print("Venda não encontrada!")
+
+def excluirVenda():
+    if len(vendas) == 0:
+        print("Nenhuma venda cadastrada")
+        return
+
+    buscID = int(input("Digite o ID da venda que deseja excluir: "))
+
+    for v in vendas:
+        if v[0] == buscID:
+            print(f"Venda encontrada: {v}")
+
+            for p in produtos:
+                if p[0] == v[2]:
+                    p[4] += v[4]
+
+            vendas.remove(v)
+
+            with open("vendasdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for venda in vendas:
+                    arquivo.write(f"{venda[0]}, {venda[1]}, {venda[2]}, {venda[3]}, {venda[4]}, {venda[5]}, {venda[6]}\n")
+
+            with open("produtosdocedose.txt", "w", encoding="utf-8") as arquivo:
+                for prod in produtos:
+                    arquivo.write(f"ID:{prod[0]};produto:{prod[1]};{prod[2]};valor:{prod[3]};quantidade:{prod[4]}\n")
+
+            print("Venda excluída com sucesso!")
+            return
+
+    print("Venda não encontrada!")
+
+    
+while True:
+    
+    print("""===Dose doce===
+1 - Clientes.
+2 - Produtos.
+3 - Estoque(Relátorio).
+4 - Vendas.
+5 - Sair.""")
+
+    opcM = int(input("Digite a opção escolhida:"))
+
+    if (opcM==1):
+        while True:
+            
+            print("""===Menu de clientes ===
+1- Cadastrar cliente
+2- Buscar cliente
+3-Atualizar cliente
+4-Excluir cliente
+5- Voltar ao menu""")
+            opcao= int(input("Digite a opção escolhida:"))
+            if (opcao == 1):
+               contadorN = cadastrarCliente(contadorN)
+            elif (opcao == 2):
+                encontrarCliente()
+            elif(opcao == 3):
+                 atualizarCliente()
+            elif(opcao==4):
+                excluirCliente()
+            elif(opcao == 5):
+                break
+            else:
+                print("Opção invalida")
+                pass
+
+    elif(opcM == 2):
+        while True:
+            print("""===Menu de produtos ===
+1 - Cadastrar produto.
+2 - Buscar produto.
+3 - Atualizar produto.
+4 - Excluir produto.
+5 - Voltar ao menu.""")
+            opcao = int(input("Digite a opção escolhida:"))
+            if (opcao == 1):
+                contadorP = cadastrarProduto(contadorP)
+            elif (opcao == 2):
+                 buscarProduto()
+            elif (opcao == 3):
+                atualizarProduto()
+            elif(opcao==4):
+                excluirProduto()
+            elif(opcao == 5):
+                break
+            else:
+                print("Opção invalida")
+                pass
+            
+    elif(opcM == 3):
+        while True:
+            print("""===Estoque===
+1 - acessar estoque.
+2- Voltar ao menu.""")
+            opcao = int(input("Digite a opção escolhida:"))
+            if (opcao == 1):
+                with open("produtosdocedose.txt" , "r", encoding="utf-8")as arquivo:
+                 if (len(produtos) == 0):
+                   print("Nehum produto cadastrado")
+                   for linha in produtos:
+                       print(linha)
+            elif (opcao == 2):
+                break
+            else:     
+              print("Opçao invalida")
+              pass
+    elif(opcM==4):
+        while True:
+            print("""===Menu e vendas===
+1 - Cadastrar venda
+2 - Buscar venda
+3 - Atualizar venda
+4 - Excluir venda
+5 - Voltar ao menu""")
+            opcao = int(input("Digite a opção escolhida:"))
+            if(opcao == 1):
+                contadorV = cadastrarVenda(contadorV)
+            elif(opcao ==2):
+                buscarVenda()
+            elif(opcao == 3):
+                atualizarVenda()
+            elif(opcao == 4):
+                excluirVenda()
+            elif(opcao == 5):
+                break
+            else:
+                print("Opção invalida")
+                pass    
